@@ -1,0 +1,72 @@
+<html>
+    <head>
+        <script src="https://unpkg.com/react@17/umd/react.production.min.js"></script>
+        <script src="https://unpkg.com/react-dom@17/umd/react-dom.production.min.js"></script>
+        <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    </head>
+
+    <body>
+        <div id="root"></div>
+    
+        <script type="text/babel">
+            const htmlRoot = document.getElementById('root')
+            
+            const elementStyle = {
+                backgroundImage: 'url(inicio.png)',
+                width: '720px',
+                height: '470px',
+                margin: '0 auto',
+                position: 'relative'
+
+            }
+
+            const Start = ({onClick}) => {
+                const handleClick = () => {
+                    onClick()
+                }
+
+                const buttonStyle = {
+                    background: 'none',
+                    backgroundImage: 'url(startButton.png)',
+                    width: '150px',
+                    height: '50px',
+                    border: 'none',
+                    position: 'absolute',
+                    top: '70%',
+                    left: '40%'
+                }
+
+                return (
+                    <button style={buttonStyle} onClick={handleClick}/>
+                )             
+            }
+
+            const StartPage = () => {
+                const onItemClick = (event) => {
+                    var size = parseInt(prompt("Maze size: ", "Type a number between 10-40"))
+                    
+                    if(size >= 10 && size <= 40){
+                        localStorage.setItem('mazeSize', size)
+                        location.replace("aliceinwonderland.html")
+                    } else {
+                        localStorage.setItem('mazeSize', 10)
+                        location.replace("aliceinwonderland.html")
+                        
+                    }                    
+                }
+
+                return (
+                    <div style={elementStyle}>
+                        <Start onClick={onItemClick}/>
+                    </div>
+                )
+            }
+
+            ReactDOM.render(
+                <StartPage />,
+                htmlRoot
+            )
+        </script>
+    </body>
+
+</html>
