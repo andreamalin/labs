@@ -1,0 +1,189 @@
+<html>
+<head>
+</head>
+<body>
+    <script type="application/javascript">
+        //EMPEZAMOS CON LA BARRA ABAJO
+ 		setTimeout(function(){ 			
+ 			var scrollingElement = (document.scrollingElement || document.body);
+			scrollingElement.scrollTop = scrollingElement.scrollHeight;
+		}, 300);
+
+    	var today = new Date(); //Para obtener la fecha de los mensajes
+		document.body.style.background = "#36393F";  //Color gris 
+		document.body.style.marginBottom = '70px'; 
+		document.body.style.marginTop = '50px'; 
+		document.body.style.overflow = "auto"
+
+		const header = document.createElement('header')
+		header.style.height = '40px'
+		header.style.paddingTop = '10px'
+		header.style.width = '100%'
+		header.style.color = '#C8C9CA'
+		header.style.background = '#36393F'
+		header.style.top = '0px'
+		header.append('# general')
+		header.style.fontFamily = 'Trebuchet MS'
+		header.style.fontWeight = 'bold'
+		header.style.color = 'white'
+		header.style.boxShadow = '0 4px 2px -2px #27292D'
+		header.style.position = 'fixed'
+		document.body.append(header)
+
+
+		//Caja de mensajes
+		const cajita = document.createElement('footer')
+		const input = document.createElement('input')
+
+		cajita.style.backgroundColor = '#36393F'
+		cajita.style.width = '100%'
+		input.style.width = '98%'
+		input.style.background = '#484C52'
+		input.placeholder = 'Message #general'
+		input.style.fontFamily = 'Trebuchet MS'
+		input.style.color = '#C8C9CA'
+		input.style.border = 'none'
+		input.style.height = '40px'
+		input.maxLength = 140 //Limitamos la cantidad de palabras a 140
+		cajita.append(input)
+		document.body.append(cajita)
+		//La colocamos al final de la pagina
+		cajita.style.position = 'fixed'
+		cajita.style.bottom = '0px'
+		cajita.style.height = '60px'
+
+      
+
+		//Se manda el mensaje al servidor cuando se presiona enter
+		input.addEventListener('keydown', (event) => {
+		if (event.key === 'Enter') {
+			fetch('http://ubeje.xyz:3000/messages', { 
+			method: 'POST',
+				headers: {
+					'Content-Type': 'application/json'
+				},
+				body: JSON.stringify({
+					sender: "andrea",
+					message: input.value,
+					date: today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate(),
+				})
+			})
+		input.value = ''; //Regresamos a blanco la cajita
+		}  	
+		}) 
+
+
+		//PARA LOS AVATARES
+		const colores = ["frogideas", 'sugarsweets', 'heatwave', 'seascape', 'summerwarmth', "bythepool", "duskfalling", "berrypie", "daisygarden"];
+		const usuarios = {}
+
+		function crearMensaje(autor, mensaje, fecha) {
+			//REALIZAMOS UN AVATAR DISTINTO POR USUARIO
+			const linkAvatar = 'http://tinygraphs.com/squares/'.concat(autor).concat('?theme=').concat(colores[Math.floor(Math.random()*(colores.length))]).concat('&numcolors=3&size=220&fmt=svg')
+
+			if (usuarios[autor] === undefined) {
+				usuarios[autor] = linkAvatar
+			}
+				
+			//Por cada mensaje
+			const tamanoMens = document.createElement('div');
+			tamanoMens.style.marginTop = '10px'
+			tamanoMens.style.marginBottom = '10px'
+
+			//Avatar
+			const avatar = document.createElement('img')
+			avatar.src = usuarios[autor]
+			avatar.style.borderRadius = '50%'
+			avatar.style.width = '50px'
+			avatar.style.height = '50px'
+
+			//Nombre, mensaje, fecha
+			const name_sender = document.createElement('div')
+			name_sender.style.fontWeight = 'bold'
+			name_sender.style.fontFamily = 'Trebuchet MS'
+			name_sender.style.color = 'white'
+			const message_sender = document.createElement('div')
+			message_sender.style.fontFamily = 'Trebuchet MS'
+			message_sender.style.color = '#C8C9CA'
+			const message_date = document.createElement('div')
+			message_date.style.fontFamily = 'Trebuchet MS'
+			message_date.style.color = '#55575C'
+			message_date.style.display = 'inline-block'
+			message_date.style.marginLeft = '10px'
+			message_date.style.fontSize = '10px'
+
+
+			//Metemos todo a la cajita del mensaje
+			message_date.append(fecha)
+			name_sender.append(autor)
+			tamanoMens.append(avatar)
+
+			//Quitamos los mensajes nulos
+			if (mensaje !== '') {
+				//Cajita de texto posicionada al lado del avatar
+				const text = document.createElement('div')
+				name_sender.append(message_date)
+				text.append(name_sender)
+
+				
+				//Revisamos si es imagen
+				if (mensaje.includes('.jpg') || mensaje.includes('.gif') || mensaje.includes('.jpeg') 
+					|| mensaje.includes('.png') || mensaje.includes('.svg')) {					
+					img = document.createElement('img');
+					img.src = mensaje;
+					img.style.width='200px'
+					img.style.height = 'auto'
+
+					text.append(img)
+
+				} else {
+					message_sender.append(mensaje)
+					text.append(message_sender)
+				}
+
+				
+
+				text.style.display = 'inline-block'
+				avatar.style.display = 'inline-block'
+				text.style.verticalAlign = 'top'
+				text.style.marginLeft = '10px'
+				//La agregamos y mostramos en el body
+				tamanoMens.append(text)
+				document.body.append(tamanoMens)
+			}
+		}
+
+		//Cantidad de mensajes en el server
+		var mensajesActuales = 0
+
+		//Mandamos a llamar todos los mensajes desde el refresh
+		fetch('http://ubeje.xyz:3000/messages').then((r) => {
+			return r.json()
+			}).then((j) => {
+			j.forEach((mensaje) => {
+				mensajesActuales++
+				crearMensaje(mensaje.sender, mensaje.message, mensaje.date)
+			}
+	       	)
+		})
+
+		//Se agregan los mensajes nuevos durante la sesion
+		window.setInterval(function(){
+			fetch('http://ubeje.xyz:3000/messages').then((r) => {
+				return r.json()
+				}).then((j) => {
+				j.forEach((mensaje) => {
+					//Comparamos el id con la cantidad de mensajes que hay
+					if (mensaje.id > mensajesActuales) {
+						//Si es mayor, significa que es nuevo y se agrega al doc
+						crearMensaje(mensaje.sender, mensaje.message, mensaje.date)
+						mensajesActuales++ //Lo sumamos
+					}
+				}
+		       	)
+			})	
+		}, 500); //Se realiza cada 0.5 seg
+			
+	</script>
+</body>
+</html>

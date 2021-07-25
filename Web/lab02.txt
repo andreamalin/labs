@@ -1,0 +1,68 @@
+----------------------
+Utilizando netstat (20)
+----------------------
+TCP - Puerto 80, 53, 22
+UDP - Puerto 68, 53
+NUMERIC - Puerto 22
+PROGRAM - ssh, http
+----------------------
+----------------------
+Utilizando lsof (10)
+----------------------
+El único archivo abierto es nginx
+----------------------
+----------------------
+Utilizando dig (10)
+----------------------
+Nombre del dns: http://13.68.205.253/
+----------------------
+----------------------
+Utilizando telnet (30)
+----------------------
+telnet ubeje.xyz 80
+Trying 44.232.3.206...
+Connected to ubeje.xyz.
+Escape character is '^]'.
+GET /index.html
+<html>
+        <body>
+                Hello world
+        </body>
+</html>
+----------------------
+----------------------
+Utilizando curl (10)
+----------------------
+curl http://ubeje.xyz
+<html>
+        <body>
+                Hello world
+        </body>
+</html>
+----------------------
+----------------------
+Utilizando tail (10)
+ubuntu@ip-172-31-0-17:~$ tail /var/log/nginx/access.log
+----------------------
+44.232.3.206 - - [21/Jan/2021:15:05:54 +0000] "GET / HTTP/1.1" 200 46 "-" "curl/7.68.0"
+44.232.3.206 - - [21/Jan/2021:15:06:41 +0000] "GET / HTTP/1.1" 200 46 "-" "curl/7.68.0"
+103.118.170.105 - - [21/Jan/2021:15:25:41 +0000] "GET / HTTP/1.1" 200 46 "-" "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome                                                       /51.0.2704.103 Safari/537.36"
+49.118.195.233 - - [21/Jan/2021:15:28:18 +0000] "HEAD http://110.242.68.4/ HTTP/1.1" 200 0 "-" "Mozilla/5.0 (Windows NT 10.0; WOW64; rv:45.0) Gecko/20100101 Fir                                                       efox/45.0"
+175.152.111.30 - - [21/Jan/2021:15:28:21 +0000] "CONNECT www.baidu.com:443 HTTP/1.1" 400 166 "-" "-"
+178.128.170.60 - - [21/Jan/2021:15:45:41 +0000] "GET / HTTP/1.1" 200 46 "-" "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:40.0) Gecko/20100101 Firefox/40.1"
+203.189.146.253 - - [21/Jan/2021:15:50:40 +0000] "GET / HTTP/1.1" 200 46 "-" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_6) AppleWebKit/601.7.7 (KHTML, like G                                                       ecko) Version/9.1.2 Safari/601.7.7"
+186.151.62.115 - - [21/Jan/2021:16:07:59 +0000] "GET /19365/lab2.txt HTTP/1.1" 200 6111 "-" "Mozilla/5.0 (iPhone; CPU iPhone OS 14_3 like Mac OS X) AppleWebKit/                                                       605.1.15 (KHTML, like Gecko) Version/14.0.2 Mobile/15E148 Safari/604.1"
+186.151.62.115 - - [21/Jan/2021:16:07:59 +0000] "GET /favicon.ico HTTP/1.1" 404 134 "http://ubeje.xyz/19365/lab2.txt" "Mozilla/5.0 (iPhone; CPU iPhone OS 14_3 l                                                       ike Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/14.0.2 Mobile/15E                                                       148 Safari/604.1"
+186.151.62.115 - - [21/Jan/2021:16:09:51 +0000] "GET /19365/lab2.txt HTTP/1.1" 206 6111 "-" "WhatsApp/2.21.11.3 i"
+----------------------
+----------------------
+RAM (5)
+----------------------
+475 M total memory
+167 M used memory
+----------------------
+----------------------
+ip (5)
+----------------------
+ping ubeje.xyz
+PING ubeje.xyz (44.232.3.206) 56(84) bytes of data.
